@@ -6,7 +6,7 @@ output: pdf_document
 ```{r, warning=FALSE,echo=FALSE, message=FALSE}
 library(dplyr)
 library(tidyverse)
-library(readr)
+library(readr) 
 library(tufte) 
 library(tibble) 
 library(broom)
