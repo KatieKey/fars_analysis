@@ -2,7 +2,7 @@
 title: "clean_description"
 author: "Katie Key"
 date: "10/24/2017"
-output: pdf_document
+output: pdf_document 
 ---
 ###Questions about the Article
 
