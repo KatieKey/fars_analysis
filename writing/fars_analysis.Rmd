@@ -2,29 +2,60 @@
 title: "fars_analysis"
 author: "Katie Key"
 date: "10/18/2017"
-output: html_document
+output: pdf_document
 ---
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+
+```{r, warning=FALSE,echo=FALSE, message=FALSE}
+
+library(dplyr)
+library(tidyverse)
+library(readr)
+library(tufte) 
+library(tibble)
+library(broom)
+library(tidyr)
+library(purrr)
+library(foreign)
+library(ggplot2)
+library(ggthemes)
+
+load("../data/fars_data.RData")
+
+clean_fars %>%
+  mutate(year_cat = cut(year, breaks = c(1999, 2002, 2006, 2010),
+                        labels = c("1999-2002", "2003-2006",
+                                   "2007-2010"),
+                        include.lowest = TRUE, right = TRUE)) %>%
+  filter(!is.na(sex)) %>%
+  group_by(drug_type, sex, year_cat) %>%
+  summarize(n_non_missing = sum(!is.na(positive_for_drug)),
+            positive_test = sum(positive_for_drug, na.rm = TRUE),
+            perc_positive = round(100 * positive_test / n_non_missing, 1)) %>%
+  select(drug_type, sex, year_cat, perc_positive) %>%
+  unite(sex_year_cat, sex, year_cat) %>%
+  spread(sex_year_cat, perc_positive) %>%
+  knitr::kable(col.names = c("Drug type", "F 1999-2002",
+                             "F 2003-2006", "F 2007-2010",
+                             "M 1999-2002", "M 2003-2006",
+                             "M 2007-2010"))
+
 ```
 
-## R Markdown
 
-This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
 
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
 
-```{r cars}
-summary(cars)
+```{r, warning=FALSE,echo=FALSE, message=FALSE}
+
+drug_list <- c("Alcohol", "Nonalcohol", "Narcotic", "Depressant",
+"Stimulant", "Cannabinoid", "Other")
+drug_trend_tests_ca <- lapply(drug_list, test_trend_ca)
+drug_trend_tests_ca <- dplyr::bind_rows(drug_trend_tests_ca) %>%
+dplyr::mutate(drug = drug_list) %>%
+dplyr::select(drug, Z, p.value)
+drug_trend_tests_ca %>% knitr::kable()
+  
+
 ```
 
-## Including Plots
 
-You can also embed plots, for example:
-
-```{r pressure, echo=FALSE}
-plot(pressure)
-```
-
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.

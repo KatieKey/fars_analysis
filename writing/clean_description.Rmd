@@ -174,7 +174,7 @@ if(year <= 2008){
 
 
 ```{r, warning=FALSE,echo=TRUE, message=FALSE}
-load("../data/clean_fars.RData")
+load("../data/fars_data.RData")
 
 clean_fars %>%
   mutate(year_cat = cut(year, breaks = c(1999, 2002, 2006, 2010),
