@@ -3,7 +3,7 @@ title: "Reproduced analysis of FARS data"
 output: pdf_document 
 --- 
 
-```{r, warning=FALSE,echo=FALSE, message=FALSE}
+```{r, warning=FALSE,echo=TRUE, message=FALSE}
 library(dplyr)
 library(tidyverse)
 library(readr) 
@@ -27,7 +27,7 @@ source("../R/fars_functions.R")
 
 #### **Percentages of drivers testing positive by drug type, sex, and year group**
 
-```{r, warning=FALSE,echo=FALSE, message=FALSE}
+```{r, warning=FALSE,echo=TRUE, message=FALSE}
 
 clean_fars %>%
   mutate(year_cat = cut(year, breaks = c(1999, 2002, 2006, 2010),
@@ -51,7 +51,7 @@ clean_fars %>%
 
 #### **Figure 1: Prevalence of nonalcohol drugs in fatally injured drivers by year and age group**
 
-```{r,warning=FALSE,echo=FALSE, message=FALSE, fig.width=7, fig.height=3.75}
+```{r,warning=FALSE,echo=TRUE, message=FALSE, fig.width=7, fig.height=3.75}
 clean_one <- clean_fars %>% 
   filter(drug_type != "Alcohol") %>%
   filter(!is.na(agecat)) %>%
@@ -76,7 +76,7 @@ clean_one
 
    
 #### **Figure 2: Prevalence of nonalcohol drugs in fatally injured drivers by year and drug type**
-```{r,warning=FALSE,echo=FALSE, message=FALSE,fig.width=7, fig.height=3.75}
+```{r,warning=FALSE,echo=TRUE, message=FALSE,fig.width=7, fig.height=3.75}
 clean_two <- clean_fars %>% 
   filter(drug_type != "Alcohol") %>% 
   filter(!is.na(positive_for_drug)) %>% 
@@ -95,7 +95,7 @@ clean_two
 
 #### **Figure 3: Prevalence of cannabinoid drugs in fatally injured drivers by year and age group**
 
-```{r,warning=FALSE,echo=FALSE, message=FALSE,fig.width=7, fig.height=3.75}
+```{r,warning=FALSE,echo=TRUE, message=FALSE,fig.width=7, fig.height=3.75}
 
 clean_three <- clean_fars %>%
   filter(drug_type == "Cannabinoid") %>% 
@@ -117,7 +117,7 @@ clean_three
 #### **Prevalence of drugs in fatally injured drivers for 1999 and 2010 by drug type**
 
 
-```{r, warning=FALSE,echo=FALSE, message=FALSE}
+```{r, warning=FALSE,echo=TRUE, message=FALSE}
 perc_cis <- function(x = x, n = n){
   library(scales) 
   
@@ -160,7 +160,7 @@ kable(prevalence_table)
 
 #### **Statistics for testing for trend in prevalence of drugs over study years by drug type using Cochran-Armitage trend test**
 
-```{r, warning=FALSE,echo=FALSE, message=FALSE}
+```{r, warning=FALSE,echo=TRUE, message=FALSE}
 
 test_trend_ca <- function(drug, data = clean_fars) {
   if(drug == "Nonalcohol"){
@@ -210,7 +210,7 @@ drug_trend_tests_ca %>% knitr::kable()
 
 #### **Statistics for testing for trend in prevalence of drugs over study years by drug type using Wald test of logistic regression coefficient for “year”**
 
-```{r, warning=FALSE,echo=FALSE, message=FALSE}
+```{r, warning=FALSE,echo=TRUE, message=FALSE}
 
 test_trend_log_reg <- function(drug, data = clean_fars) {
     if(drug == "Nonalcohol"){
